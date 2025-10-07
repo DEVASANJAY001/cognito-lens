@@ -11,12 +11,16 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    port: 8080
+  },
   build: {
     outDir: "dist",
     rollupOptions: {
       input: {
         popup: resolve(__dirname, "popup.html"),
         options: resolve(__dirname, "options.html"),
+        sidebar: resolve(__dirname, "sidebar.html"),
         background: resolve(__dirname, "src/background/background.ts"),
         contentScript: resolve(__dirname, "src/content/contentScript.ts"),
       },

@@ -23,6 +23,26 @@ const Popup = () => {
     }
   };
 
+  const handleOpenSidebar = async () => {
+    setStatus("Opening AI Chat...");
+    
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      
+      if (tab.id) {
+        await chrome.tabs.sendMessage(tab.id, {
+          action: "toggleSidebar"
+        });
+        
+        setStatus("✓ AI Chat opened!");
+        setTimeout(() => setStatus("Ready"), 2000);
+      }
+    } catch (error) {
+      setStatus("Error: Could not open sidebar");
+      console.error(error);
+    }
+  };
+
   const handleHighlightPage = async (color: string) => {
     setStatus(`Highlighting with ${color}...`);
     
@@ -113,6 +133,14 @@ const Popup = () => {
         <div className="button-group">
           <button
             className="action-button primary"
+            onClick={handleOpenSidebar}
+          >
+            <span className="button-icon">💬</span>
+            Open AI Chat
+          </button>
+
+          <button
+            className="action-button secondary"
             onClick={() => handleHighlightPage("#4A90E2")}
           >
             <span className="button-icon">✨</span>
@@ -123,16 +151,8 @@ const Popup = () => {
             className="action-button secondary"
             onClick={handleShowAlert}
           >
-            <span className="button-icon">💬</span>
-            Show Alert
-          </button>
-
-          <button
-            className="action-button secondary"
-            onClick={() => handleHighlightPage("#10B981")}
-          >
             <span className="button-icon">🎨</span>
-            Green Highlight
+            Show Alert
           </button>
         </div>
 
